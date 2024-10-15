@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rings Animation</title>
+  <style>
+    :root {
+      --speed: 2.5;
+      --radius: 35;
+      --base: 180;
+      --lightness: 50%;
+      --chroma: 50%;
+      --limit: 320;
+      --distance: 10;
+      --count: 20;
+      --ease: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      transform-style: preserve-3d;
+    }
+
+    html {
+      color-scheme: clear;
+    }
+
+    body {
+      background:clear;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .rings {
+      width: 50vmin;
+      max-width: 300px;
+      aspect-ratio: 1;
+      position: relative;
+      transform: translate3d(0, 0, 100vmin) rotateX(-32deg) rotateY(-32deg) rotateX(90deg);
+    }
+
+    .ring {
+      --scale-base: calc(((100 / var(--count)) * var(--index)) * 1%);
+      --scale-top: calc(((100 / var(--count)) * var(--index)) * 1%);
+      width: calc(((100 / var(--count)) * var(--index)) * 1%);
+      aspect-ratio: 1;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      transform: translate3d(0, 0, calc(var(--distance) * -1vmin));
+      animation: float calc(var(--speed) * 1s) infinite var(--ease);
+      animation-delay: calc(
+        sin((var(--index) / var(--count)) * 45deg)
+        * var(--speed) * -1s
+      );
+    }
+
+    .ring::after {
+      content: "";
+      border: 2px solid hsl(calc(var(--base) + var(--index) * (var(--limit) - var(--base)) / var(--count)), var(--chroma), var(--lightness));
+      border-radius: calc(var(--radius) * 1%);
+      position: absolute;
+      inset: 0;
+    }
+
+    @keyframes float {
+      50% {
+        transform: translate3d(0, 0, calc(var(--distance) * 1vmin));
+      }
+      0%, 45% { width: var(--scale-base); }
+      75% { width: var(--scale-top); }
+    }
+  </style>
+</head>
+<body>
+  <div class="rings" style="--count: 20">
+    <div class="ring" style="--index: 1"></div>
+    <div class="ring" style="--index: 2"></div>
+    <div class="ring" style="--index: 3"></div>
+    <div class="ring" style="--index: 4"></div>
+    <div class="ring" style="--index: 5"></div>
+    <div class="ring" style="--index: 6"></div>
+    <div class="ring" style="--index: 7"></div>
+    <div class="ring" style="--index: 8"></div>
+    <div class="ring" style="--index: 9"></div>
+    <div class="ring" style="--index: 10"></div>
+    <div class="ring" style="--index: 11"></div>
+    <div class="ring" style="--index: 12"></div>
+    <div class="ring" style="--index: 13"></div>
+    <div class="ring" style="--index: 14"></div>
+    <div class="ring" style="--index: 15"></div>
+    <div class="ring" style="--index: 16"></div>
+    <div class="ring" style="--index: 17"></div>
+    <div class="ring" style="--index: 18"></div>
+    <div class="ring" style="--index: 19"></div>
+    <div class="ring" style="--index: 20"></div>
+  </div>
+  <script>
+    const CONFIG = {
+      radius: 35,
+      hue: true,
+      lightness: 50,
+      chroma: 50,
+      hueBase: 180,
+      hueDestination: 320,
+      speed: 2.5,
+      distance: 10,
+      scale: false,
+      alternate: false,
+    };
+
+    const UPDATE = () => {
+      document.documentElement.style.setProperty('--radius', CONFIG.radius);
+      document.documentElement.style.setProperty('--base', CONFIG.hueBase);
+      document.documentElement.style.setProperty('--chroma', `${CONFIG.chroma}%`);
+      document.documentElement.style.setProperty('--lightness', `${CONFIG.lightness}%`);
+      document.documentElement.style.setProperty('--limit', CONFIG.hueDestination);
+      document.documentElement.style.setProperty('--speed', CONFIG.speed);
+      document.documentElement.style.setProperty('--distance', CONFIG.distance);
+      document.documentElement.dataset.hue = CONFIG.hue;
+      document.documentElement.dataset.scale = CONFIG.scale;
+      document.documentElement.dataset.alternate = CONFIG.alternate;
+    };
+
+    // Initialize with default configuration
+    UPDATE();
+  </script>
+</body>
+</html>
